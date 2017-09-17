@@ -14,15 +14,16 @@ type Pinger struct {
 
 // Run starts pinging.
 func (p *Pinger) Run() {
-	for {
+	c := time.Tick(p.Duration)
+	for range c {
 		resp, err := http.Get(p.URL)
 		if err != nil {
 			log.Println("pinger: ", err)
+			continue
 		}
 		log.Println("pinger: ping!")
 		if err = resp.Body.Close(); err != nil {
 			log.Println("pinger: ", err)
 		}
-		time.Sleep(p.Duration)
 	}
 }
